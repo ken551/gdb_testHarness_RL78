@@ -1,0 +1,50 @@
+# 0 alwaysFail
+# defTest "alwaysFail"
+#     set $assertResult = 1
+# testEnd
+
+# 1-1 初期化の確認
+defTest "1-1 init"
+    regSetByte $P4 0xFF
+    call initPort4()
+    regAssertEq 0 $P4
+testEnd
+
+# 1-2 電源ONの確認(LED1)
+defTest "turnon1"
+    regSetByte $P4 0x00
+    callFunc toggleLed 0
+    regAssertEq 0x04 $P4
+testEnd
+
+# 1-3 電源ONの確認(LED2)
+defTest "turnon2"
+    regSetByte $P4 0x00
+    callFunc toggleLed 1
+    regAssertEq 0x08 $P4
+testEnd
+
+# 1-4 トグル確認
+defTest "toggle"
+    regSetByte $P4 0x00
+
+# LED ON
+    callFunc toggleLed 0
+    regAssertEq 0x04 $P4
+
+# LED OFF
+    callFunc toggleLed 0
+    regAssertEq 0x00 $P4
+testEnd
+
+# returnTestの確認
+defTest "return"
+    callFunc returnTest 1
+    intAssertEq 0x02 $funcReturn
+
+    callFunc returnTest 0
+    intAssertEq 1 $funcReturn
+
+    callFunc returnTest 130
+    intAssertEq 131 (uint8_t)$funcReturn
+testEnd

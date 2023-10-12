@@ -1,0 +1,81 @@
+set $cases = 0
+set $fails = 0
+set $oks = 0
+set print symbol off
+set print elements 0
+
+source tests\registerDefine.gdbcmd
+
+set $main = (int)&main
+set $main_lsb = (char)($main & 0x000000FF)
+set $main_msb = (char)(($main & 0x0000FF00) >> 8)
+
+define outputFailInfo
+    printf "in "
+    print $testName
+    printf "!!!!!!test assert no.%d failed!!!!!!!\n", $assertNum
+end
+
+define regAssertEq
+	set $assertNum = ($assertNum + 1)
+    set $assertResult = 0
+    set $expected = $arg0
+    set $addr = $arg1
+    x/b $addr
+    set $readResult = $__
+    if $expected == $readResult
+        set $assertResult = 0
+    else
+        set $assertResult = -1
+        outputFailInfo
+        printf "%x expected, was %x \n\n", $expected, $readResult
+    end
+end
+
+
+define intAssertEq
+    set $assertNum = ($assertNum + 1)
+	set $was = $arg1
+    set $expected = $arg0
+    if $expected != $was
+        set $assertResult = -1
+        outputFailInfo
+        printf "0x%x expected, was 0x%x \n\n", $expected, $was
+    end
+end
+
+define defTest
+    unset environment $testName
+    set $testName = $arg0
+    set $cases = ($cases + 1)
+    set $assertNum = 0
+    set $assertResult = 0
+end
+
+define regSetByte
+    set {uint8_t}$arg0 = $arg1
+end
+
+define callFunc
+    set $a = $arg1
+    set $sp = $sp-1
+    set *( (char *)( (((int)$sp) & 0x000FFFFF) ) ) = 0x00
+    set $sp = $sp-1
+    set *( (char *)( (((int)$sp) & 0x000FFFFF) ) ) = 0x00
+    set $sp = $sp-1
+    set *( (char *)( (((int)$sp) & 0x000FFFFF) ) ) = (char)$main_msb
+    set $sp = $sp-1
+    set *( (char *)( (((int)$sp) & 0x000FFFFF) ) ) = (char)$main_lsb
+    set $pc = (int)($arg0)
+    continue
+    set $funcReturn = $a
+end
+
+define testEnd
+    if $assertResult != 0
+        set $fails = ($fails + 1)
+        printf "testcase \"%s\" failed\n", $testName
+    else
+        set $oks = ($oks + 1)
+    end
+end

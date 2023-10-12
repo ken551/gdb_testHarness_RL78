@@ -1,0 +1,24 @@
+target sim
+load
+
+break main
+commands
+silent
+end
+
+r
+
+printf "test start\n"
+printf "--------------------------\n"
+source tests\testMacros.gdbcmd
+source tests\allTests.gdbcmd
+printf "--------------------------\n"
+printf "test finished\n"
+printf "%d tests, %d failed\n", $cases, $fails
+if $cases == $oks
+    printf "result: OK\n"
+else
+    printf "result: FAIL\n"
+end
+printf "--------------------------\n"
+q
