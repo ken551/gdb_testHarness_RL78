@@ -74,7 +74,9 @@ end
 define testEnd
     if $assertResult != 0
         set $fails = ($fails + 1)
-        printf "testcase \"%s\" failed\n", $testName
+        printf "testcase "
+        print $testName
+        printf "failed\n"
     else
         set $oks = ($oks + 1)
     end

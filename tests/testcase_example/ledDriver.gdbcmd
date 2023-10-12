@@ -40,7 +40,7 @@ testEnd
 # returnTestの確認
 defTest "return"
     callFunc returnTest 1
-    intAssertEq 0x02 $funcReturn
+    intAssertEq 2 $funcReturn
 
     callFunc returnTest 0
     intAssertEq 1 $funcReturn
