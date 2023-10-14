@@ -12,7 +12,7 @@ Renesas RL78マイコン向けの、gdbスクリプトを使用した簡易テ�
 
 ## できること
 * uint_8を受け取り、uint_8を返す関数の呼び出し（`callFunc`）
-* voidを受け取り、voidを返す関数の呼び出し（`call`）
+* voidを受け取り、voidを返す関数の呼び出し（`callFunc`）
 * レジスタ値の比較（`regAssertEq`）
 * レジスタへの値セット（`regSetByte`）
 * int値の比較（`intAssertEq`）

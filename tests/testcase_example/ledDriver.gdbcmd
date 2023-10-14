@@ -6,7 +6,7 @@
 # 1-1 初期化の確認
 defTest "1-1 init"
     regSetByte $P4 0xFF
-    call initPort4()
+    callFunc initPort4
     regAssertEq 0 $P4
 testEnd
 
