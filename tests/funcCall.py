@@ -22,6 +22,29 @@ def setUint8Arg(argName):
     elif isRegEmpty["X"]:
         gdb.execute("set $x = (uint8_t)"+argName)
         isRegEmpty["X"] = False
+    elif isRegEmpty["C"]:
+        gdb.execute("set $c = (uint8_t)"+argName)
+        isRegEmpty["C"] = False
+    elif isRegEmpty["B"]:
+        gdb.execute("set $b = (uint8_t)"+argName)
+        isRegEmpty["B"] = False
+    else:
+        print "this feature is not implemented"
+
+def setUint16Arg(argName):
+    global isRegEmpty
+    if isRegEmpty["A"] and isRegEmpty["X"]:
+        gdb.execute("set $ax = (uint16_t)"+argName)
+        isRegEmpty["A"] = False
+        isRegEmpty["X"] = False
+    elif isRegEmpty["B"] and isRegEmpty["C"]:
+        gdb.execute("set $bc = (uint16_t)"+argName)
+        isRegEmpty["B"] = False
+        isRegEmpty["C"] = False
+    elif isRegEmpty["D"] and isRegEmpty["E"]:
+        gdb.execute("set $de = (uint16_t)"+argName)
+        isRegEmpty["D"] = False
+        isRegEmpty["E"] = False
     else:
         print "this feature is not implemented"
 
@@ -44,6 +67,8 @@ i = 1
 for arg in argArray:
     if arg == "uint8_t":
         setUint8Arg("$pyArg"+str(i))
+    if arg == "uint16_t":
+        setUint16Arg("$pyArg"+str(i))
     elif arg == "void":
         pass
     i = i + 1

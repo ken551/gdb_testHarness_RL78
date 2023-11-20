@@ -63,7 +63,12 @@ define callFunc
     end
     if $argc >= 3
         set $pyArg2 = $arg2
-        p $pyArg2
+    end
+    if $argc >= 4
+        set $pyArg3 = $arg3
+    end
+    if $argc >= 5
+        set $pyArg4 = $arg4
     end
     source tests/funcCall.py
 end
