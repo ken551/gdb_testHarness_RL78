@@ -66,3 +66,57 @@ defTest "twoArgs"
     callFunc twoArgs 1 2
     intAssertEq 4 $funcReturn
 testEnd
+
+# 2引数（uint16）の確認
+defTest "2uint16"
+    callFunc twoUint16s 1 2
+    intAssertEq 4 $funcReturn
+
+    callFunc twoUint16s 0x0F00 0x0F01
+    intAssertEq 0x2d01 $funcReturn
+
+    callFunc twoUint16s 0x0F01 0x0F00
+    intAssertEq 0x2d02 $funcReturn
+testEnd
+
+# 2引数（uint16, uint8）の確認
+defTest "u16_u8"
+    callFunc u16_u8 1 2
+    intAssertEq 4 $funcReturn
+
+    callFunc u16_u8 0x0F00 1
+    intAssertEq 0x1e01 $funcReturn
+
+    callFunc u16_u8 0x0F01 2
+    intAssertEq 0x1e04 $funcReturn
+testEnd
+
+# 2引数（uint8, uint16）の確認
+defTest "u8_u16"
+    callFunc u8_u16 1 2
+    intAssertEq 4 $funcReturn
+
+    callFunc u8_u16 1 0x0F00
+    intAssertEq 0x0f02 $funcReturn
+
+    callFunc u8_u16 2 0x0F01
+    intAssertEq 0x0f05 $funcReturn
+testEnd
+
+# 4引数(uint8_t)の確認
+defTest "four_u8"
+    callFunc four_u8 1 2 3 4
+    intAssertEq 20 $funcReturn
+
+    callFunc four_u8 4 3 2 1
+    intAssertEq 30 $funcReturn
+testEnd
+
+# 3引数(uint16_t)の確認
+defTest "3_u16"
+    callFunc three_u16 0x1111 0x2222 0x3333
+    intAssertEq 0xaaaa $funcReturn
+
+    callFunc three_u16 0x3333 0x1111 0x2222
+    intAssertEq 0xdddd $funcReturn
+testEnd
