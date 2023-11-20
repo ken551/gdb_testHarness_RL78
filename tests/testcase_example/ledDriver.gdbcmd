@@ -54,3 +54,15 @@ defTest "beef"
 	callFunc returnBeef
 	intAssertEq 0xBEEF $funcReturn
 testEnd
+
+# 2引数の確認
+defTest "twoArgs"
+    callFunc twoArgs 1 1
+    intAssertEq 3 $funcReturn
+
+    callFunc twoArgs 2 1
+    intAssertEq 5 $funcReturn
+
+    callFunc twoArgs 1 2
+    intAssertEq 4 $funcReturn
+testEnd

@@ -5,8 +5,28 @@ funcName = (pyArg0.split("<")[1]).split(">")[0]
 funcInfo = gdb.execute("info function "+funcName, to_string=True)
 funcDef = funcInfo.split(".c:\n")[1]
 
-#print "funcDef is:"
-#print funcDef
+isRegEmpty = {
+    "A": True,
+    "X": True,
+    "C": True,
+    "B": True,
+    "E": True,
+    "D": True,
+}
+
+def setUint8Arg(argName):
+    global isRegEmpty
+    if isRegEmpty["A"]:
+        gdb.execute("set $a = (uint8_t)"+argName)
+        isRegEmpty["A"] = False
+    elif isRegEmpty["X"]:
+        gdb.execute("set $x = (uint8_t)"+argName)
+        isRegEmpty["X"] = False
+    else:
+        print "this feature is not implemented"
+
+# print "funcDef is:"
+# print funcDef
 
 returnType = funcDef.split(" ")[0]
 
@@ -14,14 +34,19 @@ returnType = funcDef.split(" ")[0]
 #print returnType
 
 args = (funcDef.split("(")[1]).split(")")[0]
-#print "args are:"
-#print args
+# print "args are:"
+# print args
+
+argArray = args.split(", ")
 
 # pass arg (to A register)
-if args == "uint8_t":
-    gdb.execute("set $a = $pyArg1")
-elif args == "void":
-    pass
+i = 1
+for arg in argArray:
+    if arg == "uint8_t":
+        setUint8Arg("$pyArg"+str(i))
+    elif arg == "void":
+        pass
+    i = i + 1
 # make function call frame on stack
 gdb.execute("set $sp = $sp-1")
 gdb.execute("set *( (char *)( (((int)$sp) & 0x000FFFFF) ) ) = 0x00")
@@ -40,7 +65,7 @@ if returnType == "void":
     pass
 elif returnType == "uint8_t":
     # pass return value as uint8_t
-    gdb.execute("set $funcReturn = $a")
+    gdb.execute("set $funcReturn = (uint8_t)$a")
 elif returnType == "uint16_t":
     #pass return value as uint16_t
     gdb.execute("set $funcReturn = (uint16_t)$ax")
