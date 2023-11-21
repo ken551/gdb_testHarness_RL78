@@ -6,6 +6,8 @@ set print elements 0
 
 source tests\registerDefine.gdbcmd
 
+source tests\testMacros.py
+
 set $main = (int)&main
 set $main_lsb = (char)($main & 0x000000FF)
 set $main_msb = (char)(($main & 0x0000FF00) >> 8)
@@ -15,19 +17,9 @@ define outputFailInfo
 end
 
 define regAssertEq
-	set $assertNum = ($assertNum + 1)
-    set $assertResult = 0
     set $expected = $arg0
     set $addr = $arg1
-    x/b $addr
-    set $readResult = $__
-    if $expected == $readResult
-        set $assertResult = 0
-    else
-        set $assertResult = -1
-        outputFailInfo
-        printf "%x expected, was %x \n\n", $expected, $readResult
-    end
+    source tests\functions\regAssertEq.py
 end
 
 
