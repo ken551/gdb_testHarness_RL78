@@ -28,5 +28,11 @@ def getIntFromGdb(varName):
     tmp = int(tmp)
     return tmp
 
+def getRegValFromGdb(addrVarName):
+    tmp = gdb.execute("x/b $"+addrVarName, to_string=True)
+    tmp = tmp.split("\t")[1]
+    tmp = int(tmp)
+    return tmp
+
 def setValToGdb(varName, val):
     pass
