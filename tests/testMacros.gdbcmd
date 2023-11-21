@@ -41,6 +41,7 @@ end
 
 define callFunc
     set $pyArg0 = $arg0
+    set $pyArgc = $argc
     if $argc >= 2
         set $pyArg1 = $arg1
     end
@@ -57,12 +58,5 @@ define callFunc
 end
 
 define testEnd
-    if $assertResult != 0
-        set $fails = ($fails + 1)
-        printf "testcase "
-        print $testName
-        printf "failed\n"
-    else
-        set $oks = ($oks + 1)
-    end
+    source tests/functions/testEnd.py
 end

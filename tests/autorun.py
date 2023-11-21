@@ -2,7 +2,7 @@ gdb.execute("r")
 
 print ""
 print "--------------------------"
-print "test start"
+print "test start\n"
 gdb.execute("source tests\\testMacros.gdbcmd")
 gdb.execute("source tests\\allTests.gdbcmd")
 print "--------------------------"
