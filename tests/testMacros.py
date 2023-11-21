@@ -18,16 +18,18 @@ def getRegValFromGdb(addrVarName):
     tmp = int(tmp)
     return tmp
 
-def callFunc(func, args):
+def setRegValToGdb(reg, val):
+    gdb.execute("set {uint8_t}" + hex(reg.addr) + " = " + str(val))
+
+def callFunc(funcName, args):
     argc = len(args)
-    funcName = func.__name__
     gdb.execute("set $pyArg0 = " + funcName)
     i = 1
     for arg in args:
         gdb.execute("set $pyArg" + str(i) + " = " + str(arg))
         i = i + 1
     gdb.execute("source tests/funcCall.py")
-    funcReturn = getIntFromGdb("funcReturn")
+    funcReturn = getValFromGdb("funcReturn")
     return funcReturn
 
 def setValToGdb(varName, val):
@@ -73,17 +75,14 @@ def outputFailInfo():
     print "in test \"" + testName + "\""
     print "test assert no."+str(assertNum)+" failed!"
 
-def regAssertEq():
-    gdb.execute("set $assertNum = ($assertNum + 1)")
-    gdb.execute("set $assertResult = 0")
-    expected = getIntFromGdb("expected")
-    readResult = getRegValFromGdb("addr")
-    if expected == readResult:
-        gdb.execute("set $assertResult = 0")
-    else:
-        gdb.execute("set $assertResult = -1")
-        gdb.execute("outputFailInfo")
-        print str(expected) + " expected, was " + str(readResult)
+def regAssertEq(expected, reg):
+    global assertNum, assertResult
+    assertNum = assertNum + 1
+    was = getRegValFromGdb(reg.name)
+    if expected != was:
+        assertResult = False
+        outputFailInfo()
+        print hex(expected) + " expected, was " + hex(was)
 
 def testEnd():
     assertResult = getIntFromGdb("assertResult")
