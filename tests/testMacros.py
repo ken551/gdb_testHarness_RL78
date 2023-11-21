@@ -22,5 +22,11 @@ def getValFromGdb(varName):
     tmp = (tmp.split("= "))[1]
     return tmp
 
+def getIntFromGdb(varName):
+    tmp = gdb.execute("p/d $"+varName, to_string=True)
+    tmp = (tmp.split("= "))[1]
+    tmp = int(tmp)
+    return tmp
+
 def setValToGdb(varName, val):
     pass

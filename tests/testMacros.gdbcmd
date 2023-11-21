@@ -24,14 +24,9 @@ end
 
 
 define intAssertEq
-    set $assertNum = ($assertNum + 1)
 	set $was = $arg1
     set $expected = $arg0
-    if $expected != $was
-        set $assertResult = -1
-        outputFailInfo
-        printf "0x%x expected, was 0x%x \n\n", $expected, $was
-    end
+    source tests\functions\intAssertEq.py
 end
 
 define defTest
