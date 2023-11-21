@@ -6,7 +6,7 @@
 # 1-1 初期化の確認
 defTest "1-1 init"
     regSetByte $P4 0xFF
-    call initPort4()
+    callFunc initPort4
     regAssertEq 0 $P4
 testEnd
 
@@ -47,4 +47,22 @@ defTest "return"
 
     callFunc returnTest 130
     intAssertEq 131 (uint8_t)$funcReturn
+testEnd
+
+# returnBeefの確認
+defTest "beef"
+	callFunc returnBeef
+	intAssertEq 0xBEEF $funcReturn
+testEnd
+
+# 2引数の確認
+defTest "twoArgs"
+    callFunc twoArgs 1 1
+    intAssertEq 3 $funcReturn
+
+    callFunc twoArgs 2 1
+    intAssertEq 5 $funcReturn
+
+    callFunc twoArgs 1 2
+    intAssertEq 4 $funcReturn
 testEnd
