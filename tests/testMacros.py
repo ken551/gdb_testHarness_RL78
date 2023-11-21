@@ -29,8 +29,13 @@ def callFunc(funcName, args):
         gdb.execute("set $pyArg" + str(i) + " = " + str(arg))
         i = i + 1
     gdb.execute("source tests/funcCall.py")
-    funcReturn = getValFromGdb("funcReturn")
-    return funcReturn
+
+    funcInfo = gdb.execute("info function "+funcName, to_string=True)
+    funcDef = funcInfo.split(".c:\n")[1]
+    returnType = funcDef.split(" ")[0]
+    if returnType != "void":
+        funcReturn = getIntFromGdb("funcReturn")
+        return funcReturn
 
 def setValToGdb(varName, val):
     pass
