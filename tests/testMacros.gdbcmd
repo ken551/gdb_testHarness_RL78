@@ -11,9 +11,7 @@ set $main_lsb = (char)($main & 0x000000FF)
 set $main_msb = (char)(($main & 0x0000FF00) >> 8)
 
 define outputFailInfo
-    printf "in "
-    print $testName
-    printf "!!!!!!test assert no.%d failed!!!!!!!\n", $assertNum
+    source tests\functions\outputFailInfo.py
 end
 
 define regAssertEq
