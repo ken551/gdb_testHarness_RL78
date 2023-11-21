@@ -1,20 +1,3 @@
-# cases = 0
-# fails = 0
-# oks = 0
-# gdb.execute("set print symbol off")
-# gdb.execute("set print elements 0")
-
-# gdb.execute("set $main = (int)&main")
-# gdb.execute("set $main_lsb = (char)($main & 0x000000FF)")
-# gdb.execute("set $main_msb = (char)(($main & 0x0000FF00) >> 8)")
-
-# def outputFailInfo():
-#     tmp = gdb.execute("p $testName", to_string=True)
-#     testName = (tmp.split("= "))[1]
-#     tmp = gdb.execute("p $assertNum", to_string = True)
-#     assertNum = int((tmp.split("= "))[1])
-#     print "in " + testName
-#     print "!!!!!!!!test assert no."+str(assertNum)+" failed!!!!!!"
 
 # func for python <-> gdb interface
 def getValFromGdb(varName):
@@ -36,3 +19,49 @@ def getRegValFromGdb(addrVarName):
 
 def setValToGdb(varName, val):
     pass
+
+
+# func for gdb controlling
+def defTest():
+    gdb.execute("set $cases = ($cases + 1)")
+    gdb.execute("set $assertNum = 0")
+    gdb.execute("set $assertResult = 0")
+
+def intAssertEq():
+    gdb.execute("set $assertNum = ($assertNum + 1)")
+    was = getIntFromGdb("was")
+    expected = getIntFromGdb("expected")
+    if expected != was:
+        gdb.execute("set $assertResult = -1")
+        gdb.execute("outputFailInfo")
+        print "0x" + hex(expected) + " expected, was 0x" + hex(was)
+
+def outputFailInfo():
+    testName = getValFromGdb("testName")
+    testName = testName.replace("\\000",'')
+    testName = testName.replace("\n",'')
+    assertNum = getIntFromGdb("assertNum")
+    print "E000000: in test " + testName
+    print "E000000: test assert no."+str(assertNum)+" failed!"
+
+def regAssertEq():
+    gdb.execute("set $assertNum = ($assertNum + 1)")
+    gdb.execute("set $assertResult = 0")
+    expected = getIntFromGdb("expected")
+    readResult = getRegValFromGdb("addr")
+    if expected == readResult:
+        gdb.execute("set $assertResult = 0")
+    else:
+        gdb.execute("set $assertResult = -1")
+        gdb.execute("outputFailInfo")
+        print str(expected) + " expected, was " + str(readResult)
+
+def testEnd():
+    assertResult = getIntFromGdb("assertResult")
+    if assertResult != 0:
+        gdb.execute("set $fails = ($fails + 1)")
+        testName = getValFromGdb("testName")
+        testName = testName.replace("\n","")
+        print "E000000: testcase " + testName + " failed\n"
+    else:
+        gdb.execute("set $oks = ($oks + 1)")
