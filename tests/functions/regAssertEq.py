@@ -1,7 +1,7 @@
 gdb.execute("set $assertNum = ($assertNum + 1)")
 gdb.execute("set $assertResult = 0")
-expected = getIntFromGdb("expected")
-readResult = getRegValFromGdb("addr")
+expected = getIntVar("expected")
+readResult = getRegVal("addr")
 if expected == readResult:
     gdb.execute("set $assertResult = 0")
 else:

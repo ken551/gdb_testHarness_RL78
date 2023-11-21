@@ -14,23 +14,23 @@ class Reg:
 P4 = Reg("P4", 0xFFF04)
 
 def LED_init():
-    setRegValToGdb(P4, 0xFF)
+    setRegVal(P4, 0xFF)
     callFunc("initPort4", [])
     regAssertEq(0, P4)
 
 def turnon1():
-    setRegValToGdb(P4, 0x00)
+    setRegVal(P4, 0x00)
     callFunc("toggleLed", [0])
     regAssertEq(0x04, P4)
 
 
 def turnon2():
-    setRegValToGdb(P4, 0x00)
+    setRegVal(P4, 0x00)
     callFunc("toggleLed", [1])
     regAssertEq(0x08, P4)
 
 def toggle():
-    setRegValToGdb(P4, 0x00)
+    setRegVal(P4, 0x00)
 
     # LED ON
     callFunc("toggleLed", [0])
