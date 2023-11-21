@@ -1,1 +1,9 @@
+target sim
+load
+
+break main
+commands
+silent
+end
+
 source tests\autorun.py

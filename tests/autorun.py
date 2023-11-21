@@ -1,12 +1,8 @@
-gdb.execute("target sim")
-gdb.execute("load")
-
-gdb.execute("break main")
-
 gdb.execute("r")
 
-print "test start"
+print ""
 print "--------------------------"
+print "test start"
 gdb.execute("source tests\\testMacros.gdbcmd")
 gdb.execute("source tests\\allTests.gdbcmd")
 print "--------------------------"
