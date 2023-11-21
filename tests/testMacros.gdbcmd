@@ -32,9 +32,7 @@ end
 define defTest
     unset environment $testName
     set $testName = $arg0
-    set $cases = ($cases + 1)
-    set $assertNum = 0
-    set $assertResult = 0
+    source tests\functions\defTest.py
 end
 
 define regSetByte
