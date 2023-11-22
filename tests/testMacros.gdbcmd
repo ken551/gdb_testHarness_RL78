@@ -6,50 +6,33 @@ set print elements 0
 
 source tests\registerDefine.gdbcmd
 
+source tests\testMacros.py
+
 set $main = (int)&main
 set $main_lsb = (char)($main & 0x000000FF)
 set $main_msb = (char)(($main & 0x0000FF00) >> 8)
 
 define outputFailInfo
-    printf "in "
-    print $testName
-    printf "!!!!!!test assert no.%d failed!!!!!!!\n", $assertNum
+    source tests\functions\outputFailInfo.py
 end
 
 define regAssertEq
-	set $assertNum = ($assertNum + 1)
-    set $assertResult = 0
     set $expected = $arg0
     set $addr = $arg1
-    x/b $addr
-    set $readResult = $__
-    if $expected == $readResult
-        set $assertResult = 0
-    else
-        set $assertResult = -1
-        outputFailInfo
-        printf "%x expected, was %x \n\n", $expected, $readResult
-    end
+    source tests\functions\regAssertEq.py
 end
 
 
 define intAssertEq
-    set $assertNum = ($assertNum + 1)
 	set $was = $arg1
     set $expected = $arg0
-    if $expected != $was
-        set $assertResult = -1
-        outputFailInfo
-        printf "0x%x expected, was 0x%x \n\n", $expected, $was
-    end
+    source tests\functions\intAssertEq.py
 end
 
 define defTest
     unset environment $testName
     set $testName = $arg0
-    set $cases = ($cases + 1)
-    set $assertNum = 0
-    set $assertResult = 0
+    source tests\functions\defTest.py
 end
 
 define regSetByte
@@ -58,6 +41,7 @@ end
 
 define callFunc
     set $pyArg0 = $arg0
+    set $pyArgc = $argc
     if $argc >= 2
         set $pyArg1 = $arg1
     end
@@ -74,12 +58,5 @@ define callFunc
 end
 
 define testEnd
-    if $assertResult != 0
-        set $fails = ($fails + 1)
-        printf "testcase "
-        print $testName
-        printf "failed\n"
-    else
-        set $oks = ($oks + 1)
-    end
+    source tests/functions/testEnd.py
 end

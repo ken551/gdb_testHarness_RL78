@@ -1,1 +1,2 @@
-source tests\testcase_example\ledDriver.gdbcmd
+# source tests\testcase_example\ledDriver.gdbcmd
+source tests\testcase_example\ledDriver.py

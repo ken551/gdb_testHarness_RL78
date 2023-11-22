@@ -13,7 +13,7 @@ Renesas RL78マイコン向けの、gdbスクリプトを使用した簡易テ�
 ## できること
 * 関数の呼び出し（`callFunc`）
 * レジスタ値の比較（`regAssertEq`）
-* レジスタへの値セット（`regSetByte`）
+* レジスタへの値セット（`setRegVal`）
 * int値の比較（`intAssertEq`）
 
 動作確認をした関数の引数・返値は以下の通り。
