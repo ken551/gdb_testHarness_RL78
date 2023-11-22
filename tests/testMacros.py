@@ -7,9 +7,7 @@ def getGdbStrVar(varName):
     return tmp
 
 def getGdbIntVar(varName):
-    tmp = gdb.execute("p/d $"+varName, to_string=True)
-    tmp = (tmp.split("= "))[1]
-    tmp = int(tmp)
+    tmp = getIntVar("$"+varName)
     return tmp
 
 def getRegVal(addrVarName):
@@ -23,6 +21,17 @@ def setRegVal(reg, val):
 
 def setIntVar(varName, val):
     gdb.execute("set var "+varName+"="+str(val))
+
+def getIntVar(varName):
+    tmp = gdb.execute("p/d "+varName, to_string=True)
+    tmp = (tmp.split("= "))[1]
+    tmp = int(tmp)
+    return tmp
+
+def getIntArrayVar(varName, index):
+    tmp = getIntVar(varName + "[" + str(index) + "]")
+    return tmp
+
 
 def callFunc(funcName, args):
     argc = len(args)

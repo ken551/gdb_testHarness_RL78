@@ -108,6 +108,35 @@ def three_u16():
     ret = callFunc("three_u16", [0x3333, 0x2222, 0x1111])
     intAssertEq(0xeeee, ret)
 
+def multiply():
+    setIntVar("multiplier", 0)
+    ret = callFunc("multiply", [5])
+    intAssertEq(0, ret)
+
+    setIntVar("multiplier", 1)
+    ret = callFunc("multiply",[5])
+    intAssertEq(5,ret)
+
+    setIntVar("multiplier", 2)
+    ret = callFunc("multiply", [5])
+    intAssertEq(10, ret)
+
+    setIntVar("multiplier",0xFF)
+    ret = callFunc("multiply", [5])
+    intAssertEq(0x4fb, ret)
+
+    setIntVar("multiplier", 2)
+    ret = callFunc("multiply", [0xFF])
+    intAssertEq(0x1FE, ret)
+
+def setArray():
+    setIntVar("multiplier", 1)
+    callFunc("setArray",[])
+    for i in range(10):
+        res = getIntArrayVar("hogeArray", i)
+        intAssertEq((i+1), res)
+
+
 # write tests below
 doTest(LED_init)
 doTest(turnon1)
@@ -121,3 +150,5 @@ doTest(u16_u8)
 doTest(u8_u16)
 doTest(four_u8)
 doTest(three_u16)
+doTest(multiply)
+doTest(setArray)
