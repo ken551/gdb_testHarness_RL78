@@ -1,15 +1,13 @@
 # variables for test execution
 
 # func for python <-> gdb interface
-def getStrVar(varName):
+def getGdbStrVar(varName):
     tmp = gdb.execute("p $"+varName, to_string=True)
     tmp = (tmp.split("= "))[1]
     return tmp
 
-def getIntVar(varName):
-    tmp = gdb.execute("p/d $"+varName, to_string=True)
-    tmp = (tmp.split("= "))[1]
-    tmp = int(tmp)
+def getGdbIntVar(varName):
+    tmp = getIntVar("$"+varName)
     return tmp
 
 def getRegVal(addrVarName):
@@ -20,6 +18,20 @@ def getRegVal(addrVarName):
 
 def setRegVal(reg, val):
     gdb.execute("set {uint8_t}" + hex(reg.addr) + " = " + str(val))
+
+def setIntVar(varName, val):
+    gdb.execute("set var "+varName+"="+str(val))
+
+def getIntVar(varName):
+    tmp = gdb.execute("p/d "+varName, to_string=True)
+    tmp = (tmp.split("= "))[1]
+    tmp = int(tmp)
+    return tmp
+
+def getIntArrayVar(varName, index):
+    tmp = getIntVar(varName + "[" + str(index) + "]")
+    return tmp
+
 
 def callFunc(funcName, args):
     argc = len(args)
@@ -34,7 +46,7 @@ def callFunc(funcName, args):
     funcDef = funcInfo.split(".c:\n")[1]
     returnType = funcDef.split(" ")[0]
     if returnType != "void":
-        funcReturn = getIntVar("funcReturn")
+        funcReturn = getGdbIntVar("funcReturn")
         return funcReturn
 
 def doTest(testFunc):
@@ -61,12 +73,12 @@ def doTest(testFunc):
 # func for gdb controlling
 
 def assertEq(expected, was):
-    global assertNum, assertResult
+    global assertNum, assertResult, testName
     assertNum = assertNum + 1
     if expected != was:
         assertResult = False
-        outputFailInfo()
-        print "assert failed: " + hex(expected) + " expected, was " + hex(was)
+        print "in test \"" + testName + "\""
+        print "test assert no."+str(assertNum)+" failed!: " + hex(expected) + " expected, was " + hex(was)+"\n"
 
 def intAssertEq(expected, was):
     assertEq(expected, was)
@@ -74,8 +86,3 @@ def intAssertEq(expected, was):
 def regAssertEq(expected, reg):
     was = getRegVal(reg.name)
     assertEq(expected, was)
-
-def outputFailInfo():
-    global assertNum, testName
-    print "in test \"" + testName + "\""
-    print "test assert no."+str(assertNum)+" failed!"
