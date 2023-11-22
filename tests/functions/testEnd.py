@@ -1,7 +1,7 @@
-assertResult = getIntVar("assertResult")
+assertResult = getGdbIntVar("assertResult")
 if assertResult != 0:
     gdb.execute("set $fails = ($fails + 1)")
-    testName = getStrVar("testName")
+    testName = getGdbStrVar("testName")
     testName = testName.replace("\n","")
     print "E000000: testcase " + testName + " failed\n"
 else:

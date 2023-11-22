@@ -1,12 +1,12 @@
 # variables for test execution
 
 # func for python <-> gdb interface
-def getStrVar(varName):
+def getGdbStrVar(varName):
     tmp = gdb.execute("p $"+varName, to_string=True)
     tmp = (tmp.split("= "))[1]
     return tmp
 
-def getIntVar(varName):
+def getGdbIntVar(varName):
     tmp = gdb.execute("p/d $"+varName, to_string=True)
     tmp = (tmp.split("= "))[1]
     tmp = int(tmp)
@@ -21,6 +21,9 @@ def getRegVal(addrVarName):
 def setRegVal(reg, val):
     gdb.execute("set {uint8_t}" + hex(reg.addr) + " = " + str(val))
 
+def setIntVar(varName, val):
+    gdb.execute("set var "+varName+"="+str(val))
+
 def callFunc(funcName, args):
     argc = len(args)
     gdb.execute("set $pyArg0 = " + funcName)
@@ -34,7 +37,7 @@ def callFunc(funcName, args):
     funcDef = funcInfo.split(".c:\n")[1]
     returnType = funcDef.split(" ")[0]
     if returnType != "void":
-        funcReturn = getIntVar("funcReturn")
+        funcReturn = getGdbIntVar("funcReturn")
         return funcReturn
 
 def doTest(testFunc):

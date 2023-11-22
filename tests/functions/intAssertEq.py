@@ -1,6 +1,6 @@
 gdb.execute("set $assertNum = ($assertNum + 1)")
-was = getIntVar("was")
-expected = getIntVar("expected")
+was = getGdbIntVar("was")
+expected = getGdbIntVar("expected")
 if expected != was:
     gdb.execute("set $assertResult = -1")
     gdb.execute("outputFailInfo")
