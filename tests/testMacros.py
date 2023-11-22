@@ -45,9 +45,19 @@ def callFunc(funcName, args):
     funcInfo = gdb.execute("info function "+funcName, to_string=True)
     funcDef = funcInfo.split(".c:\n")[1]
     returnType = funcDef.split(" ")[0]
-    if returnType != "void":
-        funcReturn = getGdbIntVar("funcReturn")
-        return funcReturn
+
+    # set return value
+    if returnType == "void":
+        pass
+    elif returnType == "uint8_t":
+        # pass return value as uint8_t
+        return getIntVar("(uint8_t)$a")
+    elif returnType == "uint16_t":
+        #pass return value as uint16_t
+        return getIntVar("(uint16_t)$ax")
+    else:
+        print "not working"
+
 
 def doTest(testFunc):
     # test start function

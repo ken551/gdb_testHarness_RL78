@@ -85,14 +85,11 @@ gdb.execute("set *( (char *)( (((int)$sp) & 0x000FFFFF) ) ) = (char)$main_lsb")
 gdb.execute("set $pc = (int)($pyArg0)")
 gdb.execute("continue")
 
-# set return value
-if returnType == "void":
-    pass
-elif returnType == "uint8_t":
-    # pass return value as uint8_t
-    gdb.execute("set $funcReturn = (uint8_t)$a")
-elif returnType == "uint16_t":
-    #pass return value as uint16_t
-    gdb.execute("set $funcReturn = (uint16_t)$ax")
-else:
-    print "not working"
+# while True:
+#     tmpBt = gdb.execute("bt", to_string=True)
+#     if tmpBt == btMain:
+#         break
+#     else:
+
+#         gdb.execute("return")
+#         gdb.execute("continue")
