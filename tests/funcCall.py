@@ -90,6 +90,13 @@ while True:
     if tmpBt == btMain:
         break
     else:
-        stub_caller(2)
+        stub_datum = stubData[0]
+        #get args
+        for argName in (stub_datum.args).keys():
+            (stub_datum.args)[argName] = getIntVar(argName)
+        #set returnValue
+        if stub_datum.returnVal != None:
+            setFuncReturn("uint8_t", stub_datum.returnVal)
+
         gdb.execute("return")
         gdb.execute("continue")

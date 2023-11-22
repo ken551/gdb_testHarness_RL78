@@ -32,9 +32,17 @@ def getIntArrayVar(varName, index):
     tmp = getIntVar(varName + "[" + str(index) + "]")
     return tmp
 
-def setStub(funcName):
-    gdb.execute("tbreak "+funcName)
+class StubData:
+    def __init__(self, funcName, args, returnVal):
+        self.funcName = funcName
+        self.args = args
+        self.returnVal = returnVal
 
+stubData = []
+    
+def setStub(funcName, args=None, returnVal=None):
+    gdb.execute("tbreak "+funcName)
+    stubData.append(StubData(funcName, args, returnVal))
 
 def callFunc(funcName, args):
     argc = len(args)

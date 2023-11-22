@@ -136,15 +136,16 @@ def setArray():
         res = getIntArrayVar("hogeArray", i)
         intAssertEq((i+1), res)
 
-def stub_caller(returnVal):
-    hoge = getIntVar("hoge")
-    intAssertEq(3, hoge)
-    setFuncReturn("uint8_t", returnVal)
-
 def testStub():
-    setStub("caller")
-    ret = callFunc("callee",[4])
-    intAssertEq(20,ret)
+    args = {}
+    args["hoge"]=0xAA
+
+    setStub("caller", args, 11)
+
+    ret = callFunc("callee",[2])
+
+    intAssertEq(4, args["hoge"])
+    intAssertEq(20, ret)
 
 # write tests below
 doTest(LED_init)
