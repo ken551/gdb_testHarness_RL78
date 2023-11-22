@@ -32,6 +32,9 @@ def getIntArrayVar(varName, index):
     tmp = getIntVar(varName + "[" + str(index) + "]")
     return tmp
 
+def setStub(funcName):
+    gdb.execute("tbreak "+funcName)
+
 
 def callFunc(funcName, args):
     argc = len(args)
@@ -58,6 +61,13 @@ def callFunc(funcName, args):
     else:
         print "not working"
 
+def setFuncReturn(type, val):
+    if type == "void":
+        pass
+    elif type == "uint8_t":
+        gdb.execute("set $a="+str(val))
+    else:
+        print "this feature is not implemented"
 
 def doTest(testFunc):
     # test start function

@@ -7,6 +7,9 @@ testName = ""
 
 gdb.execute("r")
 
+# get backtrace info when in main()
+btMain = gdb.execute("bt", to_string=True)
+
 print ""
 print "--------------------------"
 print "test start\n"
@@ -26,4 +29,4 @@ if fails > 0:
 else:
     print "test bresult: OK "
 print "--------------------------"
-gdb.execute("q")
+# gdb.execute("q")

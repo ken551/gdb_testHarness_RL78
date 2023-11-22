@@ -85,11 +85,11 @@ gdb.execute("set *( (char *)( (((int)$sp) & 0x000FFFFF) ) ) = (char)$main_lsb")
 gdb.execute("set $pc = (int)($pyArg0)")
 gdb.execute("continue")
 
-# while True:
-#     tmpBt = gdb.execute("bt", to_string=True)
-#     if tmpBt == btMain:
-#         break
-#     else:
-
-#         gdb.execute("return")
-#         gdb.execute("continue")
+while True:
+    tmpBt = gdb.execute("bt", to_string=True)
+    if tmpBt == btMain:
+        break
+    else:
+        stub_caller(2)
+        gdb.execute("return")
+        gdb.execute("continue")
