@@ -64,12 +64,12 @@ def doTest(testFunc):
 # func for gdb controlling
 
 def assertEq(expected, was):
-    global assertNum, assertResult
+    global assertNum, assertResult, testName
     assertNum = assertNum + 1
     if expected != was:
         assertResult = False
-        outputFailInfo()
-        print "assert failed: " + hex(expected) + " expected, was " + hex(was)
+        print "in test \"" + testName + "\""
+        print "test assert no."+str(assertNum)+" failed!: " + hex(expected) + " expected, was " + hex(was)+"\n"
 
 def intAssertEq(expected, was):
     assertEq(expected, was)
@@ -77,8 +77,3 @@ def intAssertEq(expected, was):
 def regAssertEq(expected, reg):
     was = getRegVal(reg.name)
     assertEq(expected, was)
-
-def outputFailInfo():
-    global assertNum, testName
-    print "in test \"" + testName + "\""
-    print "test assert no."+str(assertNum)+" failed!"
