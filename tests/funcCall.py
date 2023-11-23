@@ -48,6 +48,11 @@ def setUint16Arg(argName):
     else:
         print "this feature is not implemented"
 
+def getFuncNameFromBt():
+    tmpBt = gdb.execute("bt", to_string=True)
+    tmpBt = (tmpBt.split(" ("))[0]
+    funcName = (tmpBt.split("#0  "))[1]
+    return funcName
 # print "funcDef is:"
 # print funcDef
 
@@ -90,13 +95,14 @@ while True:
     if tmpBt == btMain:
         break
     else:
-        stub_datum = stubData["caller"][0]
+        currentFuncName = getFuncNameFromBt()
+        stub_datum = stubData[currentFuncName][0]
         #get args
         for argName in (stub_datum.args).keys():
             (stub_datum.args)[argName] = getIntVar(argName)
         #set returnValue
         if stub_datum.returnVal != None:
-            returnType = getFuncReturnType(stub_datum.funcName)
+            returnType = getFuncReturnType(currentFuncName)
             setFuncReturn(returnType, stub_datum.returnVal)
 
         gdb.execute("return")
