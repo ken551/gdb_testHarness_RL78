@@ -32,6 +32,9 @@ def getIntArrayVar(varName, index):
     tmp = getIntVar(varName + "[" + str(index) + "]")
     return tmp
 
+def setIntArrayVar(varName, index, val):
+    gdb.execute("set var "+varName+"["+str(index)+"]="+str(val))
+
 class StubData:
     def __init__(self,  receiveArgs, returnVal):
         self.receiveArgs = receiveArgs

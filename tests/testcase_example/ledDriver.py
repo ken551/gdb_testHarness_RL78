@@ -131,20 +131,22 @@ def multiply():
 
 def setArray():
     setIntVar("multiplier", 1)
+    for i in range(10):
+        setIntArrayVar("hogeArray", i, 0xaa)
     callFunc("setArray",[])
     for i in range(10):
         res = getIntArrayVar("hogeArray", i)
         intAssertEq((i+1), res)
 
 def testStub():
-    args = {}
-    args["hoge"]=0xAA
+    receiveArgs = {}
+    receiveArgs["hoge"]=0xAA
 
-    setStub("caller", args, 10)
+    setStub("caller", receiveArgs, 10)
 
     ret = callFunc("callee",[2])
 
-    intAssertEq(2, args["hoge"])
+    intAssertEq(2, receiveArgs["hoge"])
     intAssertEq(20, ret)
 
 # write tests below
