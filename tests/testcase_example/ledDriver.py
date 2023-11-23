@@ -140,11 +140,11 @@ def testStub():
     args = {}
     args["hoge"]=0xAA
 
-    setStub("caller", args, 11)
+    setStub("caller", args, 10)
 
     ret = callFunc("callee",[2])
 
-    intAssertEq(4, args["hoge"])
+    intAssertEq(2, args["hoge"])
     intAssertEq(20, ret)
 
 # write tests below

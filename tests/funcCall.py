@@ -96,7 +96,8 @@ while True:
             (stub_datum.args)[argName] = getIntVar(argName)
         #set returnValue
         if stub_datum.returnVal != None:
-            setFuncReturn("uint8_t", stub_datum.returnVal)
+            returnType = getFuncReturnType(stub_datum.funcName)
+            setFuncReturn(returnType, stub_datum.returnVal)
 
         gdb.execute("return")
         gdb.execute("continue")

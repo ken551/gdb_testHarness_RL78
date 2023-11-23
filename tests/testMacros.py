@@ -44,6 +44,12 @@ def setStub(funcName, args=None, returnVal=None):
     gdb.execute("tbreak "+funcName)
     stubData.append(StubData(funcName, args, returnVal))
 
+def getFuncReturnType(funcName):
+    funcInfo = gdb.execute("info function "+funcName, to_string=True)
+    funcDef = funcInfo.split(".c:\n")[1]
+    returnType = funcDef.split(" ")[0] 
+    return returnType
+
 def callFunc(funcName, args):
     argc = len(args)
     gdb.execute("set $pyArg0 = " + funcName)
@@ -53,9 +59,7 @@ def callFunc(funcName, args):
         i = i + 1
     gdb.execute("source tests/funcCall.py")
 
-    funcInfo = gdb.execute("info function "+funcName, to_string=True)
-    funcDef = funcInfo.split(".c:\n")[1]
-    returnType = funcDef.split(" ")[0]
+    returnType = getFuncReturnType(funcName)
 
     # set return value
     if returnType == "void":

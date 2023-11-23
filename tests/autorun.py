@@ -29,4 +29,4 @@ if fails > 0:
 else:
     print "test bresult: OK "
 print "--------------------------"
-# gdb.execute("q")
+gdb.execute("q")
