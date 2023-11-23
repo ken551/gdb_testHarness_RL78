@@ -38,11 +38,13 @@ class StubData:
         self.args = args
         self.returnVal = returnVal
 
-stubData = []
-    
+stubData = {}
+
 def setStub(funcName, args=None, returnVal=None):
     gdb.execute("tbreak "+funcName)
-    stubData.append(StubData(funcName, args, returnVal))
+    if funcName not in stubData:
+        stubData[funcName] = []
+    (stubData[funcName]).append(StubData(funcName, args, returnVal))
 
 def getFuncReturnType(funcName):
     funcInfo = gdb.execute("info function "+funcName, to_string=True)

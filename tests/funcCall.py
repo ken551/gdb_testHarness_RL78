@@ -90,7 +90,7 @@ while True:
     if tmpBt == btMain:
         break
     else:
-        stub_datum = stubData[0]
+        stub_datum = stubData["caller"][0]
         #get args
         for argName in (stub_datum.args).keys():
             (stub_datum.args)[argName] = getIntVar(argName)
