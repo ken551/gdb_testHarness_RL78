@@ -98,8 +98,8 @@ while True:
         currentFuncName = getFuncNameFromBt()
         stub_datum = stubData[currentFuncName][0]
         #get args
-        for argName in (stub_datum.args).keys():
-            (stub_datum.args)[argName] = getIntVar(argName)
+        for argName in (stub_datum.receiveArgs).keys():
+            (stub_datum.receiveArgs)[argName] = getIntVar(argName)
         #set returnValue
         if stub_datum.returnVal != None:
             returnType = getFuncReturnType(currentFuncName)

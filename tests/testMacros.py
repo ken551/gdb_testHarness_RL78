@@ -33,17 +33,17 @@ def getIntArrayVar(varName, index):
     return tmp
 
 class StubData:
-    def __init__(self,  args, returnVal):
-        self.args = args
+    def __init__(self,  receiveArgs, returnVal):
+        self.receiveArgs = receiveArgs
         self.returnVal = returnVal
 
 stubData = {}
 
-def setStub(funcName, args=None, returnVal=None):
+def setStub(funcName, receiveArgs=None, returnVal=None):
     gdb.execute("tbreak "+funcName)
     if funcName not in stubData:
         stubData[funcName] = []
-    (stubData[funcName]).append(StubData(args, returnVal))
+    (stubData[funcName]).append(StubData(receiveArgs, returnVal))
 
 def getFuncReturnType(funcName):
     funcInfo = gdb.execute("info function "+funcName, to_string=True)
