@@ -141,13 +141,16 @@ def setArray():
 def testStub():
     receiveArgs = {}
     receiveArgs["hoge"]=0xAA
+    setIntVar("multiplier", 1)
 
-    setStub("caller", receiveArgs, 10)
+    setStub("callee", receiveArgs, 10)
 
-    ret = callFunc("callee",[2])
+    ret = callFunc("caller",[2])
+    multiplier = getIntVar("multiplier")
 
     intAssertEq(2, receiveArgs["hoge"])
     intAssertEq(20, ret)
+    intAssertEq(1, multiplier)
 
 # write tests below
 doTest(LED_init)
