@@ -70,10 +70,10 @@ def callFunc(funcName, args):
         pass
     elif returnType == "uint8_t":
         # pass return value as uint8_t
-        return getIntVar("(uint8_t)$a")
+        return getIntVar("(uint8_t)$bank0_r1")
     elif returnType == "uint16_t":
         #pass return value as uint16_t
-        return getIntVar("(uint16_t)$ax")
+        return getIntVar("(uint16_t)$bank0_rp0")
     else:
         print "not working"
 
@@ -81,7 +81,7 @@ def setFuncReturn(type, val):
     if type == "void":
         pass
     elif type == "uint8_t":
-        gdb.execute("set $a="+str(val))
+        gdb.execute("set $bank0_r1="+str(val))
     else:
         print "this feature is not implemented"
 

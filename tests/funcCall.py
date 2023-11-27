@@ -17,16 +17,16 @@ isRegEmpty = {
 def setUint8Arg(argName):
     global isRegEmpty
     if isRegEmpty["A"]:
-        gdb.execute("set $a = (uint8_t)"+argName)
+        gdb.execute("set $bank0_r1 = (uint8_t)"+argName)
         isRegEmpty["A"] = False
     elif isRegEmpty["X"]:
-        gdb.execute("set $x = (uint8_t)"+argName)
+        gdb.execute("set $bank0_r0 = (uint8_t)"+argName)
         isRegEmpty["X"] = False
     elif isRegEmpty["C"]:
-        gdb.execute("set $c = (uint8_t)"+argName)
+        gdb.execute("set $bank0_r2 = (uint8_t)"+argName)
         isRegEmpty["C"] = False
     elif isRegEmpty["B"]:
-        gdb.execute("set $b = (uint8_t)"+argName)
+        gdb.execute("set $bank0_r3 = (uint8_t)"+argName)
         isRegEmpty["B"] = False
     else:
         print "this feature is not implemented"
@@ -34,15 +34,15 @@ def setUint8Arg(argName):
 def setUint16Arg(argName):
     global isRegEmpty
     if isRegEmpty["A"] and isRegEmpty["X"]:
-        gdb.execute("set $ax = (uint16_t)"+argName)
+        gdb.execute("set $bank0_rp0 = (uint16_t)"+argName)
         isRegEmpty["A"] = False
         isRegEmpty["X"] = False
     elif isRegEmpty["B"] and isRegEmpty["C"]:
-        gdb.execute("set $bc = (uint16_t)"+argName)
+        gdb.execute("set $bank0_rp1 = (uint16_t)"+argName)
         isRegEmpty["B"] = False
         isRegEmpty["C"] = False
     elif isRegEmpty["D"] and isRegEmpty["E"]:
-        gdb.execute("set $de = (uint16_t)"+argName)
+        gdb.execute("set $bank0_rp2 = (uint16_t)"+argName)
         isRegEmpty["D"] = False
         isRegEmpty["E"] = False
     else:
