@@ -48,6 +48,11 @@ def setUint16Arg(argName):
     else:
         print "this feature is not implemented"
 
+def getFuncNameFromBt():
+    tmpBt = gdb.execute("bt", to_string=True)
+    tmpBt = (tmpBt.split(" ("))[0]
+    funcName = (tmpBt.split("#0  "))[1]
+    return funcName
 # print "funcDef is:"
 # print funcDef
 
@@ -85,14 +90,20 @@ gdb.execute("set *( (char *)( (((int)$sp) & 0x000FFFFF) ) ) = (char)$main_lsb")
 gdb.execute("set $pc = (int)($pyArg0)")
 gdb.execute("continue")
 
-# set return value
-if returnType == "void":
-    pass
-elif returnType == "uint8_t":
-    # pass return value as uint8_t
-    gdb.execute("set $funcReturn = (uint8_t)$a")
-elif returnType == "uint16_t":
-    #pass return value as uint16_t
-    gdb.execute("set $funcReturn = (uint16_t)$ax")
-else:
-    print "not working"
+while True:
+    tmpBt = gdb.execute("bt", to_string=True)
+    if tmpBt == btMain:
+        break
+    else:
+        currentFuncName = getFuncNameFromBt()
+        stub_datum = stubData[currentFuncName][0]
+        #get args
+        for argName in (stub_datum.receiveArgs).keys():
+            (stub_datum.receiveArgs)[argName] = getIntVar(argName)
+        #set returnValue
+        if stub_datum.returnVal != None:
+            returnType = getFuncReturnType(currentFuncName)
+            setFuncReturn(returnType, stub_datum.returnVal)
+
+        gdb.execute("return")
+        gdb.execute("continue")

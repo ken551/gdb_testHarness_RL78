@@ -32,6 +32,27 @@ def getIntArrayVar(varName, index):
     tmp = getIntVar(varName + "[" + str(index) + "]")
     return tmp
 
+def setIntArrayVar(varName, index, val):
+    gdb.execute("set var "+varName+"["+str(index)+"]="+str(val))
+
+class StubData:
+    def __init__(self,  receiveArgs, returnVal):
+        self.receiveArgs = receiveArgs
+        self.returnVal = returnVal
+
+stubData = {}
+
+def setStub(funcName, receiveArgs=None, returnVal=None):
+    gdb.execute("tbreak "+funcName)
+    if funcName not in stubData:
+        stubData[funcName] = []
+    (stubData[funcName]).append(StubData(receiveArgs, returnVal))
+
+def getFuncReturnType(funcName):
+    funcInfo = gdb.execute("info function "+funcName, to_string=True)
+    funcDef = funcInfo.split(".c:\n")[1]
+    returnType = funcDef.split(" ")[0] 
+    return returnType
 
 def callFunc(funcName, args):
     argc = len(args)
@@ -42,12 +63,27 @@ def callFunc(funcName, args):
         i = i + 1
     gdb.execute("source tests/funcCall.py")
 
-    funcInfo = gdb.execute("info function "+funcName, to_string=True)
-    funcDef = funcInfo.split(".c:\n")[1]
-    returnType = funcDef.split(" ")[0]
-    if returnType != "void":
-        funcReturn = getGdbIntVar("funcReturn")
-        return funcReturn
+    returnType = getFuncReturnType(funcName)
+
+    # set return value
+    if returnType == "void":
+        pass
+    elif returnType == "uint8_t":
+        # pass return value as uint8_t
+        return getIntVar("(uint8_t)$a")
+    elif returnType == "uint16_t":
+        #pass return value as uint16_t
+        return getIntVar("(uint16_t)$ax")
+    else:
+        print "not working"
+
+def setFuncReturn(type, val):
+    if type == "void":
+        pass
+    elif type == "uint8_t":
+        gdb.execute("set $a="+str(val))
+    else:
+        print "this feature is not implemented"
 
 def doTest(testFunc):
     # test start function
